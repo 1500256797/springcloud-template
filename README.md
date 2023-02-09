@@ -1,5 +1,41 @@
-## SpringCloud Gateway
+## 项目介绍
+本项目使用springcloud技术实现分布式微服务架构，使用技术包含但不限于springcloud+rabbitmq+redis+mysql+docker。通过搭建一个简单的管理，来
+演示springcloud的使用、了解springcloud使用最佳实践，以及使用dockercompose来编排容器。
 
+## 分布式微服务架构
+![img_1.png](img_1.png)
+## 使用Jekins+Docker进行持续集成
+![Notes_230209_221022_1e3.jpg](screenshoots/Notes_230209_221022_1e3.jpg)
+
+## 项目结构
+- eureka-server：注册中心
+
+- feign-api: 远程调用接口
+
+- gateway: 网关服务
+
+- mq-server: 消息队列服务
+
+- order-service: 订单服务
+
+- user-service: 用户服务
+
+## HelloWorld案例
+在Cloud-demo工程下，创建一个HelloWorld微服务，并且将其注册到注册中心。
+
+
+## SpringAmqp
+路由模式：
+1、fanout模式
+
+2、Direct模式
+![img.png](screenshoots/消息队列模型directExchage.png)
+
+3、Topic模式
+![img_1.png](screenshoots/消息队列模型topicexchange.png)
+
+## SpringCloud Gateway
+![img_2.png](img_2.png)
 ### 使用Gateway解决浏览器跨域问题
 ![img.png](screenshoots/跨域問題.png)
 
