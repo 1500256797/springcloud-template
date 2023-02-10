@@ -1,6 +1,6 @@
-package cn.xxx.user.mapper;
+package cn.xxx.user.dao;
 
-import cn.xxx.user.pojo.User;
+import cn.xxx.user.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 

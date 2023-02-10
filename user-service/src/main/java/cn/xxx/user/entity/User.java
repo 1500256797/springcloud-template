@@ -1,4 +1,4 @@
-package cn.xxx.user.pojo;
+package cn.xxx.user.entity;
 
 import lombok.Data;
 

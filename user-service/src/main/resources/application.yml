@@ -5,14 +5,19 @@ spring:
   application:
     name: userservice # userservice的服务名称
   datasource:
-    url: jdbc:mysql://mysql57:3306/cloud-user?useSSL=false
+    url: jdbc:mysql://localhost:3306/cloud-user?useSSL=false
     username: root
     password: 88888888
     driver-class-name: com.mysql.jdbc.Driver
+
+# mybatis的配置
 mybatis:
-  type-aliases-package: cn.xxx.user.pojo
-  configuration:
-    map-underscore-to-camel-case: true
+  # mybatis的配置文件路径
+  mapper-locations: classpath:mapper/*.xml
+    # mybatis的实体类路径
+  type-aliases-package: cn.xxx.user.entity
+
+
 logging:
   level:
     cn.xxx: debug

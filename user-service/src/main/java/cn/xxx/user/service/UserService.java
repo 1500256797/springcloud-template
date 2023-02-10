@@ -1,7 +1,7 @@
 package cn.xxx.user.service;
 
-import cn.xxx.user.mapper.UserMapper;
-import cn.xxx.user.pojo.User;
+import cn.xxx.user.dao.UserMapper;
+import cn.xxx.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

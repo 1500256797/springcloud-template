@@ -1,7 +1,7 @@
-package cn.xxx.user.web;
+package cn.xxx.user.controller;
 
 import cn.xxx.user.config.PatternProperties;
-import cn.xxx.user.pojo.User;
+import cn.xxx.user.entity.User;
 import cn.xxx.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
