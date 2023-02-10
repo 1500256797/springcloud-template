@@ -5,6 +5,7 @@ import cn.xxx.user.service.TbUserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -43,6 +44,7 @@ public class TbUserController {
      * @return 单条数据
      */
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public ResponseEntity<TbUser> queryById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(this.tbUserService.queryById(id));
     }
