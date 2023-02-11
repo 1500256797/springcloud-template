@@ -33,7 +33,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-
+                .antMatchers("/login").permitAll() //访问登录接口不需要认证
                 //由于在zuul已经做了scope的校验,这里可以不写了.当然你想写上也是没有问题的
                 //本项目所需要的授权范围,这个scope是写在auth服务的配置里的
                 .antMatchers("/**").access("#oauth2.hasScope('scope1')")

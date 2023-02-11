@@ -12,6 +12,10 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: oauth-service
+          uri: lb://uaaservice
+          predicates:
+            - Path=/oauth/**
         - id: user-service # 路由标示，必须唯一
           uri: lb://userservice # 路由的目标地址   http://localhost:8081/tUsers/1  ===》http://localhost:10012/tUsers/1
           predicates: # 路由断言，判断请求是否符合规则
@@ -27,7 +31,8 @@ spring:
         cors-configurations:
           '[/**]':  #所有的请求都拦截
             allowedOrigins: #允许哪些网站的跨域请求
-              - "http://localhost:8090"
+              - "http://127.0.0.1:8848"
+              - "http://localhost:8848"
               - "http://www.leyou.com"
             allowedMethods: #允许的请求方法
               - "GET"

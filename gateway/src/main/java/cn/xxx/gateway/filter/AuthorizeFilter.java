@@ -64,7 +64,8 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
         // 2. 获取请求参数的url
         String url = request.getURI().getPath();
-        if (url.indexOf("/oauth") > 0) {
+        System.out.println("【 url 】 " + url);
+        if (url.startsWith("/oauth")) {
             // 3. 如果是登录请求，直接放行
             return chain.filter(exchange);
         }
