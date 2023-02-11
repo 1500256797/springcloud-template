@@ -157,6 +157,8 @@ Spring-security-oauth2是spring-security的扩展，提供了OAuth2.0的实现�
 #### JWT令牌结构
 Header+Payload+Signature，其中Header和Payload都是base64编码的json字符串，Signature是对Header和Payload的签名。
 
+参考文档：
+https://github.com/lansinuote/Spring-Oauth2-Toturials
 
 ## SpringAmqp
 路由模式：

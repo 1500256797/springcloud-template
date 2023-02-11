@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.security.Principal;
 
 /**
  * (TUsers)表控制层
@@ -47,6 +48,12 @@ public class TUsersController {
     @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<TUsers> queryById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(this.tUsersService.queryById(id));
+    }
+
+    // 使用Principal对象解析当前Token并获取当前用户信息
+    @RequestMapping("me")
+    public Principal me(Principal principal) {
+        return principal;
     }
 
     /**
