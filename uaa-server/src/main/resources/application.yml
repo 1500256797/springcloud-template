@@ -2,4 +2,9 @@ server:
   port: 3001
 spring:
   application:
-    name: authorization_server
+    name: authorization_server # UAA?????????????
+
+eureka:
+  client:
+    service-url:  # eureka?????
+      defaultZone: http://127.0.0.1:10086/eureka
