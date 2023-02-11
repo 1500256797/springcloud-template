@@ -70,6 +70,10 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
             return chain.filter(exchange);
         }
 
+        if (url.startsWith("/tUsers/login")) {
+            // 3. 如果是登录请求，直接放行
+            return chain.filter(exchange);
+        }
 
         String token = exchange.getRequest().getHeaders().getFirst("Authorization");
         System.out.println("【 token 】 " + token);
