@@ -5,6 +5,7 @@ import cn.xxx.user.service.TUsersService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -42,7 +43,8 @@ public class TUsersController {
      * @param id 主键
      * @return 单条数据
      */
-    @GetMapping("{id}")
+    @PostMapping("{id}")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<TUsers> queryById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(this.tUsersService.queryById(id));
     }

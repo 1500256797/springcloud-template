@@ -103,13 +103,13 @@ OAuth2.0认证服务来实现。
 所以，可以起一个统一认证授权服务，来给用户服务、订单服务、商品服务等提供认证和授权。
 #### 分布式服务的认证方案
 - 基于token的认证方式
-![img.png](img.png)
+![img.png](screenshoots/基于token的认证方式.png)
 基于token的认证方式，优点如下：
 - 适合统一认证的机制，客户端、一方应用、三方应用都可以使用token来认证。
 - token认证方式对第三方应用接入更适合，因为他更开放，可以使用当前流行的开放协议，如OAuth2.0、JWT。
 - 一般情况下服务端无需存储token，减轻了服务端的压力。
 #### 分布式服务的认证技术方案
-![img_1.png](img_1.png)
+![img_1.png](screenshoots/分布式系统认证技术方案.png)
 由网关对客户端进行认证，认证后由具体微服务进行权限认证。
 
 ####  OAuth2.0协议介绍
@@ -119,24 +119,24 @@ OAuth2.0是一个开放的授权协议，用于授权第三方应用访问用户
 继而获取到用户的个人信息，如头像、昵称等。
 #### OAuth2.0协议的实现
 Spring-security-oauth2是spring-security的扩展，提供了OAuth2.0的实现，可以很方便的实现OAuth2.0协议。
-![img_3.png](img_3.png)
+![img_3.png](screenshoots/Oauth2的基本概念.png)
 下面将单独起UAA认证服务，
 1、授权服务的配置
-![img_4.png](img_4.png)
+![img_4.png](screenshoots/授权服务三大配置.png)
 2、
-![img_2.png](img_2.png)
+![img_2.png](screenshoots/授权码模式案例.png)
 
 ### 令牌模式
 - 授权码模式
-![img_5.png](img_5.png)
+![img_5.png](screenshoots/授权码模式.png)
 使用场景：用户使用微信扫码登录微博。
 - 密码模式
-![img_6.png](img_6.png)
+![img_6.png](screenshoots/密码模式.png)
 使用场景：用户提供账号密码来申请令牌。
 - 客户端模式
-![img_7.png](img_7.png)
+![img_7.png](screenshoots/客户端模式.png)
 使用场景：比密码模式还简单
-![img_8.png](img_8.png)
+![img_8.png](screenshoots/客户端模式参数列表.png)
 ### springsecurity的认证授权流程
 ![img_10.png](screenshoots/基于springsecurity的认证流程.png)
 其中核心的类就是UserDetailService，我们就是在这个类里使用账号名去数据库查询用户信息。
@@ -147,7 +147,7 @@ Spring-security-oauth2是spring-security的扩展，提供了OAuth2.0的实现�
 
 ### JWT令牌
 #### JWT令牌介绍
-![img_9.png](img_9.png)
+![img_9.png](screenshoots/使用JWT来解决远程验证token问题.png)
 #### JWT令牌结构
 Header+Payload+Signature，其中Header和Payload都是base64编码的json字符串，Signature是对Header和Payload的签名。
 

@@ -35,8 +35,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .authorizeRequests()
 
                 //由于在zuul已经做了scope的校验,这里可以不写了.当然你想写上也是没有问题的
-                .antMatchers("/**").permitAll()//.access("#oauth2.hasScope('all')")
-
+                //本项目所需要的授权范围,这个scope是写在auth服务的配置里的
+                .antMatchers("/**").access("#oauth2.hasScope('scope1')")
                 .and()
 
                 //这个貌似是配置要不要把token信息记录在session中
