@@ -50,5 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             }
             return null;
         };
+
+
+        // TODO 从数据库中查询用户信息,并将用户详细信息转成json字符串后 保存在MyUserDetails的username属性中。这样就实现了自定义用户信息。
+        // ps: 扩展用户信息由两种方案，一种是在MyUserDetails中添加属性，另一种是将用户信息转成json字符串后保存在MyUserDetails的username属性中。显然第二种方案更加简单。
     }
 }
