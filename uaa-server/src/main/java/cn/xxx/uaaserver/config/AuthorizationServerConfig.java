@@ -95,8 +95,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         defaultTokenServices.setTokenEnhancer(tokenEnhancerChain);
 
         defaultTokenServices.setTokenStore(tokenStore);      //配置令牌的存储策略
-        defaultTokenServices.setAccessTokenValiditySeconds(300); //令牌默认有效期5分钟，单位秒
-        defaultTokenServices.setRefreshTokenValiditySeconds(1500); //刷新令牌默认有效期25分钟，单位秒
+        defaultTokenServices.setAccessTokenValiditySeconds(3000); //令牌默认有效期50分钟，单位秒
+        defaultTokenServices.setRefreshTokenValiditySeconds(15000); //刷新令牌默认有效期250分钟，单位秒
 
 
         return defaultTokenServices;
