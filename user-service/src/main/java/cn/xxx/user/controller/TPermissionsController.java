@@ -1,23 +1,28 @@
 package cn.xxx.user.controller;
 
+
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.api.ApiController;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.xxx.user.entity.TPermissions;
 import cn.xxx.user.service.TPermissionsService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * (TPermissions)表控制层
  *
  * @author makejava
- * @since 2023-02-10 19:27:30
+ * @since 2023-02-17 18:51:55
  */
 @RestController
 @RequestMapping("tPermissions")
-public class TPermissionsController {
+public class TPermissionsController extends ApiController {
     /**
      * 服务对象
      */
@@ -25,15 +30,15 @@ public class TPermissionsController {
     private TPermissionsService tPermissionsService;
 
     /**
-     * 分页查询
+     * 分页查询所有数据
      *
-     * @param tPermissions 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
+     * @param page 分页对象
+     * @param tPermissions 查询实体
+     * @return 所有数据
      */
     @GetMapping
-    public ResponseEntity<Page<TPermissions>> queryByPage(TPermissions tPermissions, PageRequest pageRequest) {
-        return ResponseEntity.ok(this.tPermissionsService.queryByPage(tPermissions, pageRequest));
+    public R selectAll(Page<TPermissions> page, TPermissions tPermissions) {
+        return success(this.tPermissionsService.page(page, new QueryWrapper<>(tPermissions)));
     }
 
     /**
@@ -43,42 +48,41 @@ public class TPermissionsController {
      * @return 单条数据
      */
     @GetMapping("{id}")
-    public ResponseEntity<TPermissions> queryById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(this.tPermissionsService.queryById(id));
+    public R selectOne(@PathVariable Serializable id) {
+        return success(this.tPermissionsService.getById(id));
     }
 
     /**
      * 新增数据
      *
-     * @param tPermissions 实体
+     * @param tPermissions 实体对象
      * @return 新增结果
      */
     @PostMapping
-    public ResponseEntity<TPermissions> add(TPermissions tPermissions) {
-        return ResponseEntity.ok(this.tPermissionsService.insert(tPermissions));
+    public R insert(@RequestBody TPermissions tPermissions) {
+        return success(this.tPermissionsService.save(tPermissions));
     }
 
     /**
-     * 编辑数据
+     * 修改数据
      *
-     * @param tPermissions 实体
-     * @return 编辑结果
+     * @param tPermissions 实体对象
+     * @return 修改结果
      */
     @PutMapping
-    public ResponseEntity<TPermissions> edit(TPermissions tPermissions) {
-        return ResponseEntity.ok(this.tPermissionsService.update(tPermissions));
+    public R update(@RequestBody TPermissions tPermissions) {
+        return success(this.tPermissionsService.updateById(tPermissions));
     }
 
     /**
      * 删除数据
      *
-     * @param id 主键
-     * @return 删除是否成功
+     * @param idList 主键结合
+     * @return 删除结果
      */
     @DeleteMapping
-    public ResponseEntity<Boolean> deleteById(Integer id) {
-        return ResponseEntity.ok(this.tPermissionsService.deleteById(id));
+    public R delete(@RequestParam("idList") List<Long> idList) {
+        return success(this.tPermissionsService.removeByIds(idList));
     }
-
 }
 

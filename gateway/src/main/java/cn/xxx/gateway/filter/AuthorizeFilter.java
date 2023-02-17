@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,8 @@ import reactor.core.publisher.Mono;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.List;
+
+import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR;
 
 
 // @Order(-1)
@@ -34,48 +37,43 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
     // exchange:请求上下文 里面可以获取request response等信息
     // chain 用来把请求委托给下一个过滤器
     // Mono 返回标识当前过滤器业务结束
-//    @Override
-//    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-//        // 1.获取请求参数
-//        ServerHttpRequest request = exchange.getRequest();
-//        MultiValueMap<String, String> params = request.getQueryParams();
-//        // 2.获取参数中的 authorization 参数
-//        String auth = params.getFirst("authorization");
-//        // 3.判断参数值是否等于 admin
-//        if ("admin".equals(auth)) {
-//            // 4.是，放行
-//            return chain.filter(exchange);
-//        }
-//        // 5.否，拦截
-//        // 5.1.设置状态码401:未登录
-//        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-//        // 5.2.拦截请求
-//        return exchange.getResponse().setComplete();
-//    }
-
-
-
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        // 1.获取请求参数
-        ServerHttpRequest request = exchange.getRequest();
-        MultiValueMap<String, String> params = request.getQueryParams();
+        HttpHeaders headers = exchange.getRequest().getHeaders();
+        String token = "";
+        String url = exchange.getRequest().getURI().getPath();
+        // 使用 Spring Gateway 和过滤器实现检查 WebSocket 请求路径中是否包含 token 参数的示例代码
+        // WebSocket协议是无法在请求头中携带token等参数的。如果需要在WebSocket请求中携带token参数进行鉴权，
+        // 可以考虑使用类似于在url路径中携带token的方式。在客户端建立WebSocket连接时，可以在url路径中携带token参数  wss://example.com/audio?token=your_token
+        // 判断是否为 WebSocket 请求
+        if (headers.containsKey("Upgrade") && headers.get("Upgrade").contains("websocket")) {
+            String query = exchange.getRequest().getURI().getQuery();
+            // 判断请求路径中是否包含 token 参数
+            if (query != null && query.contains("token=")) {
+                token = query.split("token=")[1];
+            } else if (url.contains("token=")) {
+                token = url.split("token=")[1];
+            }
+        } else {
+            // 非 WebSocket 请求，继续执行后续操作
+            // 1.获取请求参数
+            ServerHttpRequest request = exchange.getRequest();
+            MultiValueMap<String, String> params = request.getQueryParams();
 
-        // 2. 获取请求参数的url
-        String url = request.getURI().getPath();
-        System.out.println("【 url 】 " + url);
-        if (url.startsWith("/oauth")) {
-            // 3. 如果是登录请求，直接放行
-            return chain.filter(exchange);
+            // 2. 获取请求参数的url
+            System.out.println("【 url 】 " + url   );
+            if (url.startsWith("/oauth")) {
+                // 3. 如果是登录请求，直接放行
+                return chain.filter(exchange);
+            }
+
+            if (url.startsWith("/tUsers/login")) {
+                // 3. 如果是登录请求，直接放行
+                return chain.filter(exchange);
+            }
+            token = exchange.getRequest().getHeaders().getFirst("Authorization");
         }
 
-        if (url.startsWith("/tUsers/login")) {
-            // 3. 如果是登录请求，直接放行
-            return chain.filter(exchange);
-        }
-
-        String token = exchange.getRequest().getHeaders().getFirst("Authorization");
         System.out.println("【 token 】 " + token);
         if (token == null) {
             // 拦截请求
@@ -106,9 +104,6 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         }
         return chain.filter(exchange);
     }
-
-
-
 
 
     /*

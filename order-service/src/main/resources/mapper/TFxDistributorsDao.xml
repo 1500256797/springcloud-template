@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xxx.order.dao.TFxDistributorsDao">
+
+    <resultMap type="cn.xxx.order.entity.TFxDistributors" id="TFxDistributorsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="level" column="level" jdbcType="INTEGER"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 定义结果集映射 -->
+    <resultMap id="DistributorsVoMap" type="cn.xxx.order.vo.DistributorsVo">
+        <id property="id" column="id"/>
+        <result property="userId" column="userId"/>
+        <result property="userName" column="userName"/>
+        <result property="userPhone" column="userPhone"/>
+        <result property="parentId" column="parentId"/>
+        <result property="parentName" column="parentName"/>
+        <result property="parentPhone" column="parentPhone"/>
+        <result property="level" column="level"/>
+        <result property="levelName" column="levelName"/>
+        <result property="createdAt" column="createdAt"/>
+        <result property="updatedAt" column="updatedAt"/>
+        <result property="status" column="status"/>
+        <result property="statusName" column="statusName"/>
+    </resultMap>
+
+    <!-- 根据分销商id查询分销商详情 -->
+    <select id="selectDistributorById" resultMap="DistributorsVoMap">
+        SELECT
+            d.id,
+            d.user_id as userId,
+            u.name as userName,
+            u.email as userPhone,
+            d.parent_id as parentId,
+            pd.name as parentName,
+            d.level,
+            l.name as levelName,
+            d.created_at as createdAt,
+            d.updated_at as updatedAt,
+            d.status,
+            CASE d.status
+                WHEN 1 THEN '正常'
+                WHEN 2 THEN '删除'
+                ELSE '未知状态'
+                END AS statusName
+        FROM
+            t_fx_distributors d
+                LEFT JOIN t_users u ON d.user_id = u.id
+                LEFT JOIN t_fx_levels l ON d.level = l.id
+                left JOIN t_users pd on d.parent_id = pd.id
+        WHERE d.id = #{id}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TFxDistributorsMap">
+        select
+          id, user_id, parent_id, level, created_at, updated_at, status
+        from t_fx_distributors
+        where id = #{id}
+    </select>
+
+
+
+</mapper>
+

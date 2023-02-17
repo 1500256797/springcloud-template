@@ -9,6 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <mybatisplus.version>3.3.1</mybatisplus.version>
+    </properties>
     <artifactId>user-service</artifactId>
 
     <dependencies>
@@ -20,12 +23,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <!--mybatis-->
+        <!--引入 MyBatis-Plus 之后请不要再次引入 MyBatis 以及 MyBatis-Spring，以避免因版本差异导致的问题。-->
         <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatisplus.version}</version>
         </dependency>
-
         <!--spring.data Pageable分页查询-->
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -70,6 +73,12 @@
             <version>1.2.57</version>
         </dependency>
 
+        <!--工具类-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.3.10</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>app</finalName>

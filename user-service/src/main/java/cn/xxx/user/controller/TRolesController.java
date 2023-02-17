@@ -1,23 +1,28 @@
 package cn.xxx.user.controller;
 
+
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.api.ApiController;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.xxx.user.entity.TRoles;
 import cn.xxx.user.service.TRolesService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * (TRoles)表控制层
  *
  * @author makejava
- * @since 2023-02-10 19:45:42
+ * @since 2023-02-17 18:52:00
  */
 @RestController
 @RequestMapping("tRoles")
-public class TRolesController {
+public class TRolesController extends ApiController {
     /**
      * 服务对象
      */
@@ -25,15 +30,15 @@ public class TRolesController {
     private TRolesService tRolesService;
 
     /**
-     * 分页查询
+     * 分页查询所有数据
      *
-     * @param tRoles 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
+     * @param page 分页对象
+     * @param tRoles 查询实体
+     * @return 所有数据
      */
     @GetMapping
-    public ResponseEntity<Page<TRoles>> queryByPage(TRoles tRoles, PageRequest pageRequest) {
-        return ResponseEntity.ok(this.tRolesService.queryByPage(tRoles, pageRequest));
+    public R selectAll(Page<TRoles> page, TRoles tRoles) {
+        return success(this.tRolesService.page(page, new QueryWrapper<>(tRoles)));
     }
 
     /**
@@ -43,42 +48,41 @@ public class TRolesController {
      * @return 单条数据
      */
     @GetMapping("{id}")
-    public ResponseEntity<TRoles> queryById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(this.tRolesService.queryById(id));
+    public R selectOne(@PathVariable Serializable id) {
+        return success(this.tRolesService.getById(id));
     }
 
     /**
      * 新增数据
      *
-     * @param tRoles 实体
+     * @param tRoles 实体对象
      * @return 新增结果
      */
     @PostMapping
-    public ResponseEntity<TRoles> add(TRoles tRoles) {
-        return ResponseEntity.ok(this.tRolesService.insert(tRoles));
+    public R insert(@RequestBody TRoles tRoles) {
+        return success(this.tRolesService.save(tRoles));
     }
 
     /**
-     * 编辑数据
+     * 修改数据
      *
-     * @param tRoles 实体
-     * @return 编辑结果
+     * @param tRoles 实体对象
+     * @return 修改结果
      */
     @PutMapping
-    public ResponseEntity<TRoles> edit(TRoles tRoles) {
-        return ResponseEntity.ok(this.tRolesService.update(tRoles));
+    public R update(@RequestBody TRoles tRoles) {
+        return success(this.tRolesService.updateById(tRoles));
     }
 
     /**
      * 删除数据
      *
-     * @param id 主键
-     * @return 删除是否成功
+     * @param idList 主键结合
+     * @return 删除结果
      */
     @DeleteMapping
-    public ResponseEntity<Boolean> deleteById(Integer id) {
-        return ResponseEntity.ok(this.tRolesService.deleteById(id));
+    public R delete(@RequestParam("idList") List<Long> idList) {
+        return success(this.tRolesService.removeByIds(idList));
     }
-
 }
 

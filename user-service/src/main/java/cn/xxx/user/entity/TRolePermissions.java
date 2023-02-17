@@ -1,17 +1,22 @@
 package cn.xxx.user.entity;
 
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
 
 /**
- * (TRolePermissions)实体类
+ * (TRolePermissions)表实体类
  *
  * @author makejava
- * @since 2023-02-10 19:45:06
+ * @since 2023-02-17 18:51:59
  */
-public class TRolePermissions implements Serializable {
-    private static final long serialVersionUID = 494597546332042596L;
-    
+@SuppressWarnings("serial")
+public class TRolePermissions extends Model<TRolePermissions> {
+
+    @TableId(type = IdType.AUTO)
     private Integer id;
     
     private Integer roleId;
@@ -73,5 +78,14 @@ public class TRolePermissions implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-}
+    /**
+     * 获取主键值
+     *
+     * @return 主键值
+     */
+    @Override
+    protected Serializable pkVal() {
+        return this.id;
+    }
+    }
 

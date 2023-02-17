@@ -3,6 +3,18 @@ server:
 spring:
   application:
     name: uaaservice # UAA?????????????
+  datasource:
+    url: jdbc:mysql://localhost:3306/cloud-user?useSSL=false
+    username: root
+    password: 88888888
+    driver-class-name: com.mysql.jdbc.Driver
+
+# mybatis的配置
+mybatis:
+  # mybatis的配置文件路径
+  mapper-locations: classpath:mapper/*.xml
+  # mybatis的实体类路径
+  type-aliases-package: cn.xxx.uaaserver.entity
 
 eureka:
   client:

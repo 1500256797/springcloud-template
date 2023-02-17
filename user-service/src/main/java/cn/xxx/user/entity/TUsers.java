@@ -1,20 +1,38 @@
 package cn.xxx.user.entity;
 
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 /**
- * (TUsers)实体类
+ * (TUsers)表实体类
  *
  * @author makejava
- * @since 2023-02-10 19:45:43
+ * @since 2023-02-17 18:52:05
  */
-public class TUsers implements Serializable {
-    private static final long serialVersionUID = 820048290411008785L;
-    
+@SuppressWarnings("serial")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class TUsers extends Model<TUsers> {
+
+    @TableId(type = IdType.AUTO)
     private Integer id;
     
     private String username;
+    //微信用户头像
+    private String avatarUrl;
+    //微信用户昵称
+    private String nickname;
+    //微信用户OpenId
+    private String openid;
     
     private String password;
     
@@ -25,63 +43,14 @@ public class TUsers implements Serializable {
     private Date createdAt;
     
     private Date updatedAt;
-
-
-    public Integer getId() {
-        return id;
+    /**
+     * 获取主键值
+     *
+     * @return 主键值
+     */
+    @Override
+    protected Serializable pkVal() {
+        return this.id;
     }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-}
 

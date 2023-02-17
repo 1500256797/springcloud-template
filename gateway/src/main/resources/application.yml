@@ -11,6 +11,8 @@ spring:
     name: gateway
   cloud:
     gateway:
+      websocket:
+        enabled: true # 开启websocket支持
       routes:
         - id: oauth-service
           uri: lb://uaaservice
@@ -24,6 +26,13 @@ spring:
           uri: lb://orderservice
           predicates:
             - Path=/order/**
+        - id: audio # websocket路由名称
+          uri: lb:ws://orderservice
+          predicates:
+            - Path=/ws_audio/**
+              # ws://localhost:10012/ws_audio/audio  路由到 ws://localhost:8088/ws_audio/audio
+          filters:
+            - StripPrefix=1 # 转发时去掉第一层路径 ws://localhost:8088/audio
       default-filters: # 全局过滤器 对多有的路由都生效
         - AddRequestHeader=Truth,Itcast is freaking awesome!
       globalcors: # 全局跨域配置
@@ -34,6 +43,8 @@ spring:
               - "http://127.0.0.1:8848"
               - "http://localhost:8848"
               - "http://www.leyou.com"
+              - "http://127.0.0.1:3000"
+              - "http://localhost:3000"
             allowedMethods: #允许的请求方法
               - "GET"
               - "POST"

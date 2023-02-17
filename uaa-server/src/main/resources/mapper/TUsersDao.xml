@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xxx.uaaserver.dao.TUsersDao">
+
+    <resultMap type="cn.xxx.uaaserver.entity.TUsers" id="TUsersMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="avatarUrl" column="avatar_url" jdbcType="VARCHAR"/>
+        <result property="nickname" column="nickName" jdbcType="VARCHAR"/>
+        <result property="openid" column="openid" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TUsersMap">
+        select
+          id, username, avatar_url, nickName, openid, password, email, status, created_at, updated_at
+        from t_users
+        where id = #{id}
+    </select>
+
+    <!--查询根据openid查或者根据usernane查-->
+    <select id="queryByOpenidOrUsername" resultMap="TUsersMap">
+        select
+            id, username, avatar_url, nickName, openid, password, email, status, created_at, updated_at
+        from t_users
+        where
+            <if test="openid != null">
+                openid = #{openid}
+            </if>
+        or
+            <if test="username != null">
+                username = #{username}
+            </if>
+    </select>
+
+</mapper>
+

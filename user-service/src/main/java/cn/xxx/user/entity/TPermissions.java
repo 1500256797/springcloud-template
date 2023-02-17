@@ -1,17 +1,22 @@
 package cn.xxx.user.entity;
 
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
 
 /**
- * (TPermissions)实体类
+ * (TPermissions)表实体类
  *
  * @author makejava
- * @since 2023-02-10 19:27:39
+ * @since 2023-02-17 18:51:56
  */
-public class TPermissions implements Serializable {
-    private static final long serialVersionUID = -90079212024318906L;
-    
+@SuppressWarnings("serial")
+public class TPermissions extends Model<TPermissions> {
+
+    @TableId(type = IdType.AUTO)
     private Integer id;
     
     private String name;
@@ -83,5 +88,14 @@ public class TPermissions implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-}
+    /**
+     * 获取主键值
+     *
+     * @return 主键值
+     */
+    @Override
+    protected Serializable pkVal() {
+        return this.id;
+    }
+    }
 

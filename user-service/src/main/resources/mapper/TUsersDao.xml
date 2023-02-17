@@ -5,6 +5,9 @@
     <resultMap type="cn.xxx.user.entity.TUsers" id="TUsersMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="avatarUrl" column="avatar_url" jdbcType="VARCHAR"/>
+        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+        <result property="openid" column="openid" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="email" column="email" jdbcType="VARCHAR"/>
         <result property="status" column="status" jdbcType="INTEGER"/>
@@ -12,133 +15,65 @@
         <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <!--查询单个-->
-    <select id="queryById" resultMap="TUsersMap">
-        select
-          id, username, password, email, status, created_at, updated_at
-        from t_users
-        where id = #{id}
+
+    <!-- 根据OpenId查询信息 -->
+    <select id="selectByOpenId" resultMap="TUsersMap">
+        SELECT
+            id,
+            username,
+            avatar_url as avatarUrl,
+            nickname,
+            openid,
+            password,
+            email,
+            status,
+            created_at as createdAt,
+            updated_at as updatedAt
+        FROM
+            t_users
+        WHERE openid = #{openId}
     </select>
 
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="TUsersMap">
-        select
-          id, username, password, email, status, created_at, updated_at
-        from t_users
-        <where>
-            <if test="id != null">
-                and id = #{id}
-            </if>
-            <if test="username != null and username != ''">
-                and username = #{username}
-            </if>
-            <if test="password != null and password != ''">
-                and password = #{password}
-            </if>
-            <if test="email != null and email != ''">
-                and email = #{email}
-            </if>
-            <if test="status != null">
-                and status = #{status}
-            </if>
-            <if test="createdAt != null">
-                and created_at = #{createdAt}
-            </if>
-            <if test="updatedAt != null">
-                and updated_at = #{updatedAt}
-            </if>
-        </where>
-        limit #{pageable.offset}, #{pageable.pageSize}
-    </select>
-
-    <!--统计总行数-->
-    <select id="count" resultType="java.lang.Long">
-        select count(1)
-        from t_users
-        <where>
-            <if test="id != null">
-                and id = #{id}
-            </if>
-            <if test="username != null and username != ''">
-                and username = #{username}
-            </if>
-            <if test="password != null and password != ''">
-                and password = #{password}
-            </if>
-            <if test="email != null and email != ''">
-                and email = #{email}
-            </if>
-            <if test="status != null">
-                and status = #{status}
-            </if>
-            <if test="createdAt != null">
-                and created_at = #{createdAt}
-            </if>
-            <if test="updatedAt != null">
-                and updated_at = #{updatedAt}
-            </if>
-        </where>
-    </select>
-
-    <!--新增所有列-->
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into t_users(username, password, email, status, created_at, updated_at)
-        values (#{username}, #{password}, #{email}, #{status}, #{createdAt}, #{updatedAt})
+    <!-- 创建新用户或更新 并获得主键-->
+    <insert id="insertOrUpdate" parameterType="cn.xxx.user.entity.TUsers"   useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO t_users
+        (
+            id,
+            username,
+            avatar_url,
+            nickname,
+            openid,
+            password,
+            email,
+            status,
+            created_at,
+            updated_at
+        )
+        VALUES
+        (
+            #{id},
+            #{username},
+            #{avatarUrl},
+            #{nickname},
+            #{openid},
+            #{password},
+            #{email},
+            #{status},
+            #{createdAt},
+            #{updatedAt}
+        )
+        ON DUPLICATE KEY UPDATE
+            username = #{username},
+            avatar_url = #{avatarUrl},
+            nickName = #{nickname},
+            openid = #{openid},
+            password = #{password},
+            email = #{email},
+            status = #{status},
+            created_at = #{createdAt},
+            updated_at = #{updatedAt}
     </insert>
 
-    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into t_users(username, password, email, status, created_at, updated_at)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-        (#{entity.username}, #{entity.password}, #{entity.email}, #{entity.status}, #{entity.createdAt}, #{entity.updatedAt})
-        </foreach>
-    </insert>
-
-    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into t_users(username, password, email, status, created_at, updated_at)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.username}, #{entity.password}, #{entity.email}, #{entity.status}, #{entity.createdAt}, #{entity.updatedAt})
-        </foreach>
-        on duplicate key update
-        username = values(username),
-        password = values(password),
-        email = values(email),
-        status = values(status),
-        created_at = values(created_at),
-        updated_at = values(updated_at)
-    </insert>
-
-    <!--通过主键修改数据-->
-    <update id="update">
-        update t_users
-        <set>
-            <if test="username != null and username != ''">
-                username = #{username},
-            </if>
-            <if test="password != null and password != ''">
-                password = #{password},
-            </if>
-            <if test="email != null and email != ''">
-                email = #{email},
-            </if>
-            <if test="status != null">
-                status = #{status},
-            </if>
-            <if test="createdAt != null">
-                created_at = #{createdAt},
-            </if>
-            <if test="updatedAt != null">
-                updated_at = #{updatedAt},
-            </if>
-        </set>
-        where id = #{id}
-    </update>
-
-    <!--通过主键删除-->
-    <delete id="deleteById">
-        delete from t_users where id = #{id}
-    </delete>
 
 </mapper>
 

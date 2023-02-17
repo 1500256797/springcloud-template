@@ -1,82 +1,63 @@
 package cn.xxx.user.service.impl;
 
-import cn.xxx.user.entity.TUsers;
+import cn.xxx.user.dao.TUserRolesDao;
+import cn.xxx.user.entity.TUserRoles;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.xxx.user.dao.TUsersDao;
+import cn.xxx.user.entity.TUsers;
 import cn.xxx.user.service.TUsersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-
-import javax.annotation.Resource;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * (TUsers)表服务实现类
  *
  * @author makejava
- * @since 2023-02-10 19:45:43
+ * @since 2023-02-17 18:52:06
  */
 @Service("tUsersService")
-public class TUsersServiceImpl implements TUsersService {
-    @Resource
-    private TUsersDao tUsersDao;
+public class TUsersServiceImpl extends ServiceImpl<TUsersDao, TUsers> implements TUsersService {
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param id 主键
-     * @return 实例对象
-     */
+    @Autowired
+    private TUserRolesDao tUserRolesDao;
+
+
     @Override
-    public TUsers queryById(Integer id) {
-        return this.tUsersDao.queryById(id);
+    public TUsers selectByOpenId(String openId) {
+        return this.baseMapper.selectByOpenId(openId);
     }
 
-    /**
-     * 分页查询
-     *
-     * @param tUsers 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
-     */
-    @Override
-    public Page<TUsers> queryByPage(TUsers tUsers, PageRequest pageRequest) {
-        long total = this.tUsersDao.count(tUsers);
-        return new PageImpl<>(this.tUsersDao.queryAllByLimit(tUsers, pageRequest), pageRequest, total);
-    }
 
-    /**
-     * 新增数据
-     *
-     * @param tUsers 实例对象
-     * @return 实例对象
-     */
+    // 添加事务
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public TUsers insert(TUsers tUsers) {
-        this.tUsersDao.insert(tUsers);
+    public TUsers createByOpenId(String openId, String nickName, String avatarUrl) {
+        TUsers tUsers = new TUsers();
+        tUsers.setOpenid(openId);
+        tUsers.setNickname(nickName);
+        tUsers.setAvatarUrl(avatarUrl);
+
+        // 设置默认的用户名
+        tUsers.setUsername("user" + openId.substring(0, 5));
+        // 设置默认的密码
+        tUsers.setPassword("password"+openId.substring(2, 10));
+        tUsers.setStatus(1);
+        tUsers.setCreatedAt(new java.util.Date());
+        tUsers.setUpdatedAt(new java.util.Date());
+        System.out.println("tUsers = " + tUsers);
+
+
+        this.baseMapper.insertOrUpdate(tUsers);
+
+        // 设置默认的角色
+        TUserRoles tUserRoles = new TUserRoles();
+        tUserRoles.setUserId(tUsers.getId());
+        tUserRoles.setRoleId(2);
+        tUserRolesDao.insert(tUserRoles);
         return tUsers;
     }
 
-    /**
-     * 修改数据
-     *
-     * @param tUsers 实例对象
-     * @return 实例对象
-     */
-    @Override
-    public TUsers update(TUsers tUsers) {
-        this.tUsersDao.update(tUsers);
-        return this.queryById(tUsers.getId());
-    }
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param id 主键
-     * @return 是否成功
-     */
-    @Override
-    public boolean deleteById(Integer id) {
-        return this.tUsersDao.deleteById(id) > 0;
-    }
 }
+

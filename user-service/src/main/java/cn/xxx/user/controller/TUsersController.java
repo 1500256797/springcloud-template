@@ -1,25 +1,28 @@
 package cn.xxx.user.controller;
 
+
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.api.ApiController;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.xxx.user.entity.TUsers;
 import cn.xxx.user.service.TUsersService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.security.Principal;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * (TUsers)表控制层
  *
  * @author makejava
- * @since 2023-02-10 19:45:43
+ * @since 2023-02-17 18:52:04
  */
 @RestController
 @RequestMapping("tUsers")
-public class TUsersController {
+public class TUsersController extends ApiController {
     /**
      * 服务对象
      */
@@ -27,15 +30,15 @@ public class TUsersController {
     private TUsersService tUsersService;
 
     /**
-     * 分页查询
+     * 分页查询所有数据
      *
-     * @param tUsers 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
+     * @param page 分页对象
+     * @param tUsers 查询实体
+     * @return 所有数据
      */
     @GetMapping
-    public ResponseEntity<Page<TUsers>> queryByPage(TUsers tUsers, PageRequest pageRequest) {
-        return ResponseEntity.ok(this.tUsersService.queryByPage(tUsers, pageRequest));
+    public R selectAll(Page<TUsers> page, TUsers tUsers) {
+        return success(this.tUsersService.page(page, new QueryWrapper<>(tUsers)));
     }
 
     /**
@@ -44,50 +47,42 @@ public class TUsersController {
      * @param id 主键
      * @return 单条数据
      */
-    @PostMapping("{id}")
-    @PreAuthorize("hasAuthority('admin')")
-    public ResponseEntity<TUsers> queryById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(this.tUsersService.queryById(id));
-    }
-
-    // 使用Principal对象解析当前Token并获取当前用户信息
-    @RequestMapping("me")
-    public Principal me(Principal principal) {
-        return principal;
+    @GetMapping("{id}")
+    public R selectOne(@PathVariable Serializable id) {
+        return success(this.tUsersService.getById(id));
     }
 
     /**
      * 新增数据
      *
-     * @param tUsers 实体
+     * @param tUsers 实体对象
      * @return 新增结果
      */
     @PostMapping
-    public ResponseEntity<TUsers> add(TUsers tUsers) {
-        return ResponseEntity.ok(this.tUsersService.insert(tUsers));
+    public R insert(@RequestBody TUsers tUsers) {
+        return success(this.tUsersService.save(tUsers));
     }
 
     /**
-     * 编辑数据
+     * 修改数据
      *
-     * @param tUsers 实体
-     * @return 编辑结果
+     * @param tUsers 实体对象
+     * @return 修改结果
      */
     @PutMapping
-    public ResponseEntity<TUsers> edit(TUsers tUsers) {
-        return ResponseEntity.ok(this.tUsersService.update(tUsers));
+    public R update(@RequestBody TUsers tUsers) {
+        return success(this.tUsersService.updateById(tUsers));
     }
 
     /**
      * 删除数据
      *
-     * @param id 主键
-     * @return 删除是否成功
+     * @param idList 主键结合
+     * @return 删除结果
      */
     @DeleteMapping
-    public ResponseEntity<Boolean> deleteById(Integer id) {
-        return ResponseEntity.ok(this.tUsersService.deleteById(id));
+    public R delete(@RequestParam("idList") List<Long> idList) {
+        return success(this.tUsersService.removeByIds(idList));
     }
-
 }
 

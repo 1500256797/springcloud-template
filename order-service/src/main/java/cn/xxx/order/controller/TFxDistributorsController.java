@@ -23,6 +23,9 @@ import java.util.List;
 @RestController
 @RequestMapping("tFxDistributors")
 public class TFxDistributorsController extends ApiController {
+
+
+
     /**
      * 服务对象
      */
@@ -54,6 +57,10 @@ public class TFxDistributorsController extends ApiController {
         return success(this.tFxDistributorsService.getById(id));
     }
 
+    @GetMapping("queryById/{id}")
+    public R queryById(@PathVariable("id") Integer id) {
+        return success(this.tFxDistributorsService.selectDistributorById(id));
+    }
     /**
      * 新增数据
      *

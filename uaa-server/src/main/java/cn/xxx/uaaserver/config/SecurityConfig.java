@@ -1,6 +1,9 @@
 package cn.xxx.uaaserver.config;
 
+import cn.xxx.uaaserver.dao.TUsersDao;
+import cn.xxx.uaaserver.entity.TUsers;
 import cn.xxx.uaaserver.model.MyUserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,13 +43,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout();
     }
 
+    @Autowired
+    private  TUsersDao tUsersDao;
+
     //配置用户信息服务 根据用户名查询用户信息
     @Bean
     public UserDetailsService userDetailsService() {
-        // 这里模拟两个用户 admin 和 user
         return s -> {
-            if ("admin".equals(s) || "user".equals(s)) {
-                return new MyUserDetails(s, passwordEncoder().encode(s), s);
+             // 从数据库中查询用户信息，并将用户详细信息转成json字符串后 保存在MyUserDetails的username属性中。这样就实现了自定义用户信息。
+            TUsers tUsers = new TUsers();
+            tUsers.setOpenid(s);
+            tUsers.setUsername(s);
+            TUsers result = tUsersDao.queryByOpenidOrUsername(tUsers);
+            if (result != null) {
+                return new MyUserDetails(result.getUsername(), passwordEncoder().encode(result.getPassword()), result.toString());
             }
             return null;
         };

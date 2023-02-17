@@ -29,3 +29,8 @@ eureka:
       defaultZone: http://127.0.0.1:10086/eureka
 pattern:
   name: 本地环境local
+
+
+wx:
+  appId: ""  #小程序appId
+  secret: ""  #小程序密钥

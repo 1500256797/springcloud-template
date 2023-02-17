@@ -8,7 +8,9 @@
 		<version>1.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-
+	<properties>
+		<mybatisplus.version>3.3.1</mybatisplus.version>
+	</properties>
 	<artifactId>uaa-server</artifactId>
 
 	<dependencies>
@@ -19,6 +21,13 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<!--引入 MyBatis-Plus 之后请不要再次引入 MyBatis 以及 MyBatis-Spring，以避免因版本差异导致的问题。-->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>${mybatisplus.version}</version>
 		</dependency>
 		<!--eureka客户端依赖-->
 		<dependency>
